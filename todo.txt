@@ -1,0 +1,37 @@
+drop images, containers, volumes
+rebuild tout depuis ce que le prof a fait
+docker compose up -d --build
+
+pipeline à nettoyer : 
+pipeline {
+    agent any
+
+    stages {
+        stage('Fork') {
+            steps {
+                echo 'Clone'
+                sh 'rm -rf jenkins-helloworld'
+                sh 'git clone https://github.com/EmyLIEUTAUD/jenkins-helloworld.git'
+                echo 'Clone : OK'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'echo Build'
+                sh 'id'
+                sh 'whoami'
+                sh 'whereis docker'
+                sh 'docker ps'
+                sh 'docker build -t emylieutaud/jenkins-helloworld .'
+                echo 'Build : OK'
+            }
+        }
+        stage('Push') {
+            steps {
+                echo 'Push'
+                sh 'docker push emylieutaud/jenkins-helloworld'
+                echo 'Push : OK'
+            }
+        }
+    }
+}
